@@ -306,8 +306,8 @@ zeon-systems/
 ├── images/                     # Raw dataset images (70 PNGs)
 │
 ├── weights/                    # Trained model weights
-│   ├── obb_best.pt            # Best YOLO-OBB model (Fold 1)
-│   └── pose_best.pt           # Best YOLO-Pose model (Fold 1)
+│   ├── obb_best.pt             # Best YOLO-OBB model
+│   └── pose_best.pt            # Best YOLO-Pose model
 │
 ├── docs/                       # Training graphs & documentation assets
 │   ├── obb_training_curves.png
