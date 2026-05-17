@@ -28,7 +28,7 @@ A two-stage deep learning pipeline for detecting microcentrifuge tubes and estim
 The pipeline follows a **two-stage architecture** to solve both tube localization and orientation estimation:
 
 ```
-                        Full Image (640×480)
+                     Full Image (640×480)
                               │
                     ┌─────────▼──────────┐
                     │  Stage 1: YOLO-OBB │
