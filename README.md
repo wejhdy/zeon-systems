@@ -31,21 +31,21 @@ The pipeline follows a **two-stage architecture** to solve both tube localizatio
                         Full Image (640×480)
                               │
                     ┌─────────▼──────────┐
-                    │   Stage 1: YOLO-OBB │
-                    │   (Tube Detection)  │
+                    │  Stage 1: YOLO-OBB │
+                    │  (Tube Detection)  │
                     └─────────┬──────────┘
                               │
                      Oriented Bounding Boxes
                      (cx, cy, w, h, rotation)
                               │
                     ┌─────────▼──────────┐
-                    │   Crop & Pad (15%) │
-                    │   Per-tube crops    │
+                    │  Crop & Pad (15%)  │
+                    │   Per-tube crops   │
                     └─────────┬──────────┘
                               │
                     ┌─────────▼──────────┐
-                    │  Stage 2: YOLO-Pose │
-                    │  (Keypoint Detect.) │
+                    │ Stage 2: YOLO-Pose │
+                    │ (Keypoint Detect.) │
                     └─────────┬──────────┘
                               │
                      2 Keypoints per tube:
@@ -53,11 +53,11 @@ The pipeline follows a **two-stage architecture** to solve both tube localizatio
                      • Tab (flap direction)
                               │
                     ┌─────────▼──────────┐
-                    │  Angle Computation  │
-                    │  atan2(Tab - Center)│
+                    │  Angle Computation │
+                    │ atan(Tab - Center) │
                     └─────────┬──────────┘
                               │
-                       angle_deg ∈ [0°, 360°)
+                    angle_deg ∈ [0°, 360°)
 ```
 
 ### Why Two Stages?
