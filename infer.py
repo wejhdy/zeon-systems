@@ -240,25 +240,25 @@ def main():
         print(f"Error: {image_path} not found.")
         return
 
-    # --- Load models ---
-    cv_runs_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), 'dataset_cv', 'runs'))
-    pose_runs_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), 'dataset_cv', 'pose_runs'))
+    # --- Load models from weights/ directory ---
+    weights_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), 'weights'))
 
-    print("Loading best OBB model...")
-    obb_path, obb_fold = find_best_obb_model(cv_runs_dir)
-    if not obb_path:
-        print("Error: No trained OBB model found. Run train_cv.py first.")
+    obb_path = os.path.join(weights_dir, 'obb_best.pt')
+    pose_path = os.path.join(weights_dir, 'pose_best.pt')
+
+    print("Loading OBB model...")
+    if not os.path.exists(obb_path):
+        print(f"Error: OBB weights not found at {obb_path}")
         return
-    print(f"  Selected: {obb_fold} ({obb_path})")
     obb_model = YOLO(obb_path)
+    print(f"  Loaded: {obb_path}")
 
-    print("Loading best Pose model...")
-    pose_path, pose_fold = find_best_pose_model(pose_runs_dir)
-    if not pose_path:
-        print("Error: No trained Pose model found. Run train_pose_cv.py first.")
+    print("Loading Pose model...")
+    if not os.path.exists(pose_path):
+        print(f"Error: Pose weights not found at {pose_path}")
         return
-    print(f"  Selected: {pose_fold} ({pose_path})")
     pose_model = YOLO(pose_path)
+    print(f"  Loaded: {pose_path}")
 
     # --- Run inference ---
     save_dir = os.path.join(os.path.dirname(__file__), 'runs', 'pipeline')

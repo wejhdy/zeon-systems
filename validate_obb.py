@@ -51,17 +51,15 @@ def find_best_model(cv_runs_dir):
     return best_model_path, best_fold
 
 def validate_best_model():
-    # 1. Locate the best fold
-    cv_runs_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), 'dataset_cv', 'runs'))
+    # 1. Load the OBB model from weights/ directory
+    weights_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), 'weights'))
+    best_model_path = os.path.join(weights_dir, 'obb_best.pt')
     
-    print("Finding the best model from Cross-Validation...")
-    best_model_path, best_fold = find_best_model(cv_runs_dir)
-    
-    if not best_model_path:
-        print("Could not locate a best.pt model. Ensure cross-validation finished successfully.")
+    if not os.path.exists(best_model_path):
+        print(f"Error: OBB weights not found at {best_model_path}")
         return
         
-    print(f"Selected Best Model from: {best_fold} ({best_model_path})")
+    print(f"Loading OBB model from: {best_model_path}")
     
     # 2. Load the best model
     model = YOLO(best_model_path)

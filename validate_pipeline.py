@@ -1,14 +1,13 @@
 import os
 import sys
 import math
-import glob
 import cv2
 import numpy as np
 import pandas as pd
 from ultralytics import YOLO
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-from infer import find_best_obb_model, find_best_pose_model, infer_single_image
+from infer import infer_single_image
 
 
 def angular_error(pred_angle, gt_angle):
@@ -59,25 +58,25 @@ def validate_pipeline():
         3. F1-Score  — 2 * P * R / (P + R)
         4. Angle Error — MAAE, Median AE, % within 15° and 30°
     """
-    # --- Load models ---
-    cv_runs_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), 'dataset_cv', 'runs'))
-    pose_runs_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), 'dataset_cv', 'pose_runs'))
+    # --- Load models from weights/ directory ---
+    weights_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), 'weights'))
 
-    print("Loading best OBB model...")
-    obb_path, obb_fold = find_best_obb_model(cv_runs_dir)
-    if not obb_path:
-        print("Error: No trained OBB model found. Run train_cv.py first.")
+    obb_path = os.path.join(weights_dir, 'obb_best.pt')
+    pose_path = os.path.join(weights_dir, 'pose_best.pt')
+
+    print("Loading OBB model...")
+    if not os.path.exists(obb_path):
+        print(f"Error: OBB weights not found at {obb_path}")
         return
-    print(f"  Selected: {obb_fold}")
     obb_model = YOLO(obb_path)
+    print(f"  Loaded: {obb_path}")
 
-    print("Loading best Pose model...")
-    pose_path, pose_fold = find_best_pose_model(pose_runs_dir)
-    if not pose_path:
-        print("Error: No trained Pose model found. Run train_pose_cv.py first.")
+    print("Loading Pose model...")
+    if not os.path.exists(pose_path):
+        print(f"Error: Pose weights not found at {pose_path}")
         return
-    print(f"  Selected: {pose_fold}")
     pose_model = YOLO(pose_path)
+    print(f"  Loaded: {pose_path}")
 
     # --- Load ground truth ---
     test_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), 'dataset', 'test'))
